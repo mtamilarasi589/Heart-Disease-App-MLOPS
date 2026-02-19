@@ -10,9 +10,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
-MODEL_PATH = os.path.join(BASE_DIR, "saved_models", "heart_model.pkl")
-SCALER_PATH = os.path.join(BASE_DIR, "saved_models", "scaler.pkl")
+MODEL_DIR = os.path.join(BASE_DIR, "saved_models")
+MODEL_PATH = os.path.join(MODEL_DIR, "heart_model.pkl")
+SCALER_PATH = os.path.join(MODEL_DIR, "scaler.pkl")
 DATA_PATH = os.path.join(BASE_DIR, "model", "heart.csv")
+
+# Ensure saved_models directory exists
+os.makedirs(MODEL_DIR, exist_ok=True)
 
 # -------------------------
 # Step 1: Train model if not exists
@@ -21,7 +25,10 @@ if not os.path.exists(MODEL_PATH) or not os.path.exists(SCALER_PATH):
     print("Training new model...")
 
     # Load dataset
+    if not os.path.exists(DATA_PATH):
+        raise FileNotFoundError(f"CSV file not found at {DATA_PATH}")
     data = pd.read_csv(DATA_PATH)
+
     X = data.drop("target", axis=1)
     y = data["target"]
 
@@ -30,7 +37,6 @@ if not os.path.exists(MODEL_PATH) or not os.path.exists(SCALER_PATH):
     X_scaled = scaler.fit_transform(X)
 
     # Save scaler
-    os.makedirs("saved_models", exist_ok=True)
     joblib.dump(scaler, SCALER_PATH)
 
     # Train/test split
@@ -46,6 +52,7 @@ if not os.path.exists(MODEL_PATH) or not os.path.exists(SCALER_PATH):
     # Save model
     joblib.dump(model, MODEL_PATH)
     print("Model trained and saved.")
+
 else:
     print("Loading existing model and scaler...")
     model = joblib.load(MODEL_PATH)
