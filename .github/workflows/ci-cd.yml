@@ -23,4 +23,4 @@ jobs:
           pip install -r app/requirements.txt
 
       - name: Run Tests
-        run: pytest tests/test_app.py
+        run: pytest 
