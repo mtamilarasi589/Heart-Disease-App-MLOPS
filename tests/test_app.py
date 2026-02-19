@@ -15,9 +15,9 @@ def test_home_page(client):
 
 def test_predict(client):
     sample_input = {
-        "age": 45, "sex": 1, "cp": 0, "trestbps": 130, "chol": 250,
+        "age": 55, "sex": 1, "cp": 2, "trestbps": 140, "chol": 230,
         "fbs": 0, "restecg": 1, "thalach": 150, "exang": 0,
-        "oldpeak": 1.0, "slope": 2, "ca": 0, "thal": 2
+        "oldpeak": 1.2, "slope": 2, "ca": 0, "thal": 2
     }
     response = client.post('/predict', data=json.dumps(sample_input),
                            content_type='application/json')

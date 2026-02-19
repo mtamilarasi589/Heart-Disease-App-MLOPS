@@ -4,7 +4,6 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
 
-    // Convert all fields to numbers
     for (let key in data) {
         data[key] = parseFloat(data[key]);
     }
